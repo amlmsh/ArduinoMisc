@@ -15,19 +15,20 @@ using namespace std;
 class SerialCom{
 public:
 	SerialCom();
-	void openSerialCom(string dev);
+	void openSerialCom(string dev, const int bps);
 	void closeSerialCom();
 	int  getValueA();
 	int  getValueB();
 	void setValueA(int value);
 	void setValueB(int value);
+
 private:
 
 	void setValueAandB(int valueA, int valueB);
 	void sendIntStr   (int fileDescrp, const char stopChar, int value);
 	int  receiveIntStr(int fileDescrp, const char  stopChar);
 
-	const int BAUDRATE_ = 9600;
+
 	int currValueA_ = 0;
 	int currValueB_ = 0;
 

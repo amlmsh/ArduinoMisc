@@ -38,12 +38,12 @@ SerialCom::SerialCom(){
 	currValueB_ = 0;
 }
 
-void SerialCom::openSerialCom(string dev){
+void SerialCom::openSerialCom(string dev, const int bps){
     fd_ = open(dev.c_str(), O_RDWR | O_NOCTTY);
 
     struct termios newtio;
     bzero(&newtio, sizeof(newtio));
-    newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
+    newtio.c_cflag = bps | CRTSCTS | CS8 | CLOCAL | CREAD;
 
     // set to 8N1
     newtio.c_cflag &= ~PARENB;
@@ -168,7 +168,7 @@ void demoSerialCom(){
 	SerialCom sc;
 
 	try {
-		sc.openSerialCom(string("/dev/ttyACM1"));
+		sc.openSerialCom(string("/dev/ttyACM0"), 9600);
 
 		int i = 0;
 
