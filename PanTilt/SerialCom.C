@@ -161,6 +161,8 @@ void SerialCom::setValueAandB(int valueA, int valueB){
 	// receive int value B
 	currValueB_ = receiveIntStr(fd_, STOPSIGN_);
 
+
+
 	return;
 }
 

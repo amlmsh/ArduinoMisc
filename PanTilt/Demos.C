@@ -40,11 +40,11 @@ void demoPanTilt(){
 
 	PanTiltDegree leftCam;
 
-	leftCam.openSerialCom("/dev/ttyACM0");
+	leftCam.openSerialCom("/dev/ttyACM1");
 
 	leftCam.closeSerialCom();
 
-	leftCam.openSerialCom("/dev/ttyACM0");
+	leftCam.openSerialCom("/dev/ttyACM1");
 
 	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
 
@@ -98,7 +98,7 @@ void demoSerialCom(){
 	SerialCom sc;
 
 	try {
-		sc.openSerialCom(string("/dev/ttyACM0"), 9600);
+		sc.openSerialCom(string("/dev/ttyACM1"), 9600);
 
 		int i = 0;
 
@@ -151,14 +151,14 @@ void demo(){
         throw string("could not set the serial settings!");
     }
 
-    int i = 0;
+    int i = -999;
     char buf[64];
     long received;
     long wrote;
     char c[1];
     int idx = 0;
 
-    while(i < 9999) {
+    while(i < 999) {
 
         string res = std::to_string(i++) + "X";
         wrote = write(fileDescriptor, res.c_str(), sizeof(char)*res.size() );
