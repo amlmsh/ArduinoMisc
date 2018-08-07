@@ -52,14 +52,28 @@ void writeServo(unsigned int position, int servo){
 
 
 void serialEvent() {
+  char c;
+
+  
   if (Serial.available()) {
     valueA = Serial.parseInt();
     valueB = Serial.parseInt();
     delay(10);
+
+    /*
+     * who knows why, but it is essential to read
+     * out "out of nowwhere" data in order to 
+     * clear the channel
+     */
+    while(Serial.available() > 0){
+      c = Serial.read();
+    }
+    
+    
     Serial.print(valueA);
-    Serial.print('X');
+    Serial.print("X");
     Serial.print(valueB);
-    Serial.print('X');
+    Serial.print("X");
 
     writeServo(valueA, SERVO_PAN);
     writeServo(valueB, SERVO_TILT);
