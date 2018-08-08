@@ -12,9 +12,9 @@ Servo servo_2;
 const unsigned int SERVO_PAN  = 1;
 const unsigned int SERVO_TILT = 2;
 const unsigned int MIN_SERVO_ANGLE = 2;
-const unsigned int MAX_SERVO_ANGLE = 180;
-const unsigned char MOTOR_PIN_1 = 9;
-const unsigned char MOTOR_PIN_2 = 10;
+const unsigned int MAX_SERVO_ANGLE = 125;
+const unsigned char MOTOR_PIN_1 = 9;  // PAN
+const unsigned char MOTOR_PIN_2 = 10;  // TILT
 const unsigned int  MOTOR_PAUSE = 10;
 
 
@@ -32,55 +32,59 @@ void setup() {
 }
 
 
-void writeServo(unsigned int position, int servo){
+unsigned int writeServo(unsigned int position, int servo) {
   unsigned int targetPosition;
 
   if (position < MIN_SERVO_ANGLE) {
     targetPosition = MIN_SERVO_ANGLE;
   } else if (position > MAX_SERVO_ANGLE) {
     targetPosition = MAX_SERVO_ANGLE;
-  } else{
+  } else {
     targetPosition = position;
   }
 
-  if(servo == SERVO_PAN){
+  if (servo == SERVO_PAN) {
     servo_1.write(targetPosition);
-  }else{
+  } else {
     servo_2.write(targetPosition);
   }
+
+  return targetPosition;
+
 }
 
 
 void serialEvent() {
-  char c;
 
-  
-  if (Serial.available()) {
-    valueA = Serial.parseInt();
-    valueB = Serial.parseInt();
-    delay(10);
-
-    /*
-     * who knows why, but it is essential to read
-     * out "out of nowwhere" data in order to 
-     * clear the channel
-     */
-    while(Serial.available() > 0){
-      c = Serial.read();
-    }
-    
-    
-    Serial.print(valueA);
-    Serial.print("X");
-    Serial.print(valueB);
-    Serial.print("X");
-
-    writeServo(valueA, SERVO_PAN);
-    writeServo(valueB, SERVO_TILT);
-  }
 
 }
 
 void loop() {
+  char c;
+
+
+  if (Serial.available()) {
+    valueA = Serial.parseInt();
+    Serial.read();  // reading in oder to remove the stop sign from serial com buffer
+    valueB = Serial.parseInt();
+    Serial.read();// reading in order to remove the stop sign from serial com buffer
+    delay(10);  // delay of 0.01 sec (might be removed)
+
+
+
+    valueA = writeServo(valueA, SERVO_PAN);
+    valueB = writeServo(valueB, SERVO_TILT);
+
+
+    /*
+       Write back to serial com the two actual
+       position of the servo motors (pan and tilts)
+    */
+    Serial.print(valueA);
+    Serial.print("X"); // this is the stop sign
+    Serial.print(valueB);
+    Serial.print("X"); // this is the stop sign
+
+  }
 
 }
