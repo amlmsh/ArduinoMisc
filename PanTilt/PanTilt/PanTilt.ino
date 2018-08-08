@@ -1,10 +1,7 @@
 #include <Servo.h>
 
 const unsigned long BAUD_RATE = 9600;
-unsigned int valueA = 1;
-unsigned int valueB = 1;
-unsigned int valueTmp;
-char cTmp;
+
 
 // servo
 Servo servo_1;
@@ -13,9 +10,8 @@ const unsigned int SERVO_PAN  = 1;
 const unsigned int SERVO_TILT = 2;
 const unsigned int MIN_SERVO_ANGLE = 2;
 const unsigned int MAX_SERVO_ANGLE = 125;
-const unsigned char MOTOR_PIN_1 = 9;  // PAN
-const unsigned char MOTOR_PIN_2 = 10;  // TILT
-const unsigned int  MOTOR_PAUSE = 10;
+const unsigned char MOTOR_PIN_1 = 9;
+const unsigned char MOTOR_PIN_2 = 10;
 
 
 void setup() {
@@ -28,7 +24,6 @@ void setup() {
   servo_1.write(45);
   servo_2.attach(MOTOR_PIN_2);
   servo_2.write(45);
-  delay(MOTOR_PAUSE);
 }
 
 
@@ -59,31 +54,29 @@ void serialEvent() {
 
 }
 
+
 void loop() {
   char c;
-
+  unsigned int value;
 
   if (Serial.available()) {
-    valueA = Serial.parseInt();
-    Serial.read();  // reading in oder to remove the stop sign from serial com buffer
-    valueB = Serial.parseInt();
-    Serial.read();// reading in order to remove the stop sign from serial com buffer
-    delay(10);  // delay of 0.01 sec (might be removed)
+    value = Serial.parseInt();  // reading position value
+    c = Serial.read();  // reading in oder to remove the stop sign from serial com buffer
 
-
-
-    valueA = writeServo(valueA, SERVO_PAN);
-    valueB = writeServo(valueB, SERVO_TILT);
-
+    if (c == 'P') {
+      value = writeServo(value, SERVO_PAN);
+    } else if (c == 'T') {
+      value = writeServo(value, SERVO_TILT);
+    } else {
+      return;
+    }
 
     /*
        Write back to serial com the two actual
        position of the servo motors (pan and tilts)
     */
-    Serial.print(valueA);
-    Serial.print("X"); // this is the stop sign
-    Serial.print(valueB);
-    Serial.print("X"); // this is the stop sign
+    Serial.print(value);
+    Serial.print(c); // this is the stop sign
 
   }
 
