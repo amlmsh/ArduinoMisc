@@ -70,8 +70,6 @@ void SerialCom::openSerialCom(string dev, const int bps){
         throw string("could not set the serial settings!");
     }
 
-
-    //setValueAandB(currValueA_, currValueB_);
 }
 void SerialCom::closeSerialCom(){
 	if(fd_ > 0){
@@ -92,21 +90,29 @@ int  SerialCom::getValueB(){
 
 void SerialCom::setValueA(int value){
 	try{
-		this->setValueAandB(value, currValueB_);
+		// send first string with value A
+		sendIntStr(fd_, STOPSIGNPAN_, value);
+
+		// receive int value A
+		currValueA_ = receiveIntStr(fd_, STOPSIGNPAN_);
 	}catch(string msg){
 		throw msg;
 	}catch(...){
-		throw (string ("unknown error during method call setVallueA"));
+		throw (string ("unknown error during method call setValueA"));
 	}
 }
 
 void SerialCom::setValueB(int value){
 	try{
-		this->setValueAandB(currValueA_, value);
+		// send first string with value B
+		sendIntStr(fd_, STOPSIGNTILT_, value);
+
+		// receive int value B
+		currValueB_ = receiveIntStr(fd_, STOPSIGNTILT_);
 	}catch(string msg){
 		throw msg;
 	}catch(...){
-		throw (string ("unknown error during method call setVallueB"));
+		throw (string ("unknown error during method call setValueB"));
 	}
 }
 
@@ -153,24 +159,6 @@ int  SerialCom::receiveIntStr(int fileDescrp, const char stopChar){
 
 }
 
-void SerialCom::setValueAandB(int valueA, int valueB){
-	if(fd_ < 0) throw string("No serial communication.");
 
-	// send first string with value A
-	sendIntStr(fd_, STOPSIGN_, valueA);
-
-	// send first string with value B
-	sendIntStr(fd_, STOPSIGN_, valueB);
-
-	// receive int value A
-	currValueA_ = receiveIntStr(fd_, STOPSIGN_);
-
-	// receive int value B
-	currValueB_ = receiveIntStr(fd_, STOPSIGN_);
-
-
-
-	return;
-}
 
 

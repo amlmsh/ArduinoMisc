@@ -17,22 +17,31 @@ public:
 	SerialCom();
 	void openSerialCom(string dev, const int bps);
 	void closeSerialCom();
+
+	/*
+	 * return value is undefined until the
+	 * method setValueA is successfully executed.
+	 */
 	int  getValueA();
+
+	/*
+	 * return value is undefined until the
+	 * method setValueB is successfully executed.
+	 */
 	int  getValueB();
 	void setValueA(int value);
 	void setValueB(int value);
 
 private:
 
-	void setValueAandB(int valueA, int valueB);
 	void sendIntStr   (int fileDescrp, const char stopChar, int value);
 	int  receiveIntStr(int fileDescrp, const char  stopChar);
-
 
 	int currValueA_ = 0;
 	int currValueB_ = 0;
 
-	const char STOPSIGN_  = 'X';
+	const char STOPSIGNPAN_  = 'P';
+	const char STOPSIGNTILT_  = 'T';
 
 	int fd_ = -1;
 };
