@@ -55,12 +55,24 @@ void   PanTiltDegree::closeSerialCom(){
 	}
 }
 
+/**
+ *
+ * Calculates for a given pan-tilt angle the
+ * corresponding sorvomotor position.
+ *
+ */
 int PanTiltDegree::degree2pos(int degreeValue){
-	return (degreeValue + 90);
+	return (-degreeValue + 90);
 }
 
+/**
+ *
+ * Calculates for a given servomotor position  the
+ * corresponding pan-tilt angle.
+ *
+ */
 int PanTiltDegree::pos2degree(int positionValue){
-	return (positionValue - 90);
+	return (-positionValue + 90);
 }
 
 int    PanTiltDegree::getPanAngle(){
@@ -71,7 +83,7 @@ int    PanTiltDegree::getPanAngle(){
 
 	try{
 		position = sc_->getValueA();
-		return this->pos2degree(position);
+		return (this->pos2degree(position));
 	}catch(string msg){
 		throw (string("Error while reading (PanTiltDegree::getPanAngle()):") + msg);
 	}
@@ -88,7 +100,7 @@ int    PanTiltDegree::getTiltAngle(){
 
 	try{
 		position = sc_->getValueB();
-		return this->pos2degree(position);
+		return (this->pos2degree(position));
 	}catch(string msg){
 		throw (string("Error while reading (PanTiltDegree::getTiltAngle()):") + msg);
 	}

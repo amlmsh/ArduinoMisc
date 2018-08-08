@@ -13,9 +13,9 @@ using namespace std;
 
 int main(){
 
-	//testPanTiltDegreeTest();
+	testPanTiltDegreeTest();
 
-	testPanTiltRadianTest();
+	//testPanTiltRadianTest();
 
 
 

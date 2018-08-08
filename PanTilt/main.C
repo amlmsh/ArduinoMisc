@@ -18,22 +18,33 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 
+
 	PanTilt::PanTiltDegree leftCam;
-	PanTilt::PanTiltDegree rigtCam;
-	PanTilt::PanTiltDegree laser;
 
 	try {
-		leftCam.openSerialCom("/dev/ttyACM0");
-		cout << "set position: ";
-		if (argc == 2) {
-			int pos = atoi(argv[1]);
-			cout << pos << endl;
-			leftCam.setPanAngle(pos);
+
+		if (argc == 4) {
+			leftCam.openSerialCom(argv[1]);
+
+
+			int panPos  = atoi(argv[2]);
+			int tiltPos = atoi(argv[3]);
+
+			cout << "target: pan = " << panPos << "  tilt = " << tiltPos <<endl;
+
+
+			leftCam.setTiltAngle(tiltPos);
+			leftCam.setPanAngle(panPos);
+
+			panPos = leftCam.getPanAngle();
+			tiltPos = leftCam.getTiltAngle();
+			cout << "actual: pan = " << panPos << "  tilt = " << tiltPos <<endl;
+
+			leftCam.closeSerialCom();
 		} else {
-			cout << "default value 90" << endl;
-			leftCam.setPanAngle(90);
+			cout << "No connection.\n";
 		}
-		leftCam.closeSerialCom();
+
 	} catch (string msg) {
 		cout << "Error, terminate: " << msg << endl;
 	} catch (...) {

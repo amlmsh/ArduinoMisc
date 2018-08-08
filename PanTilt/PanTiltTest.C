@@ -17,7 +17,7 @@ using namespace UnitTest;
 
 #define PI 3.14159
 
-string COMDEV=string("/dev/ttyACM0");
+string COMDEV=string("/dev/ttyUSB0");
 
 namespace IPanTiltDegreeTest{
 
@@ -184,7 +184,7 @@ public:
 			pt.setTiltAngle(91);
 			currPan = pt.getPanAngle();
 			currTilt = pt.getTiltAngle();
-			if((currPan == 90) && (currTilt == 90)){
+			if((currPan <= 90) && (currTilt <= 90)){
 				return true;
 			}else{
 				return false;
@@ -194,7 +194,7 @@ public:
 			pt.setTiltAngle(-91);
 			currPan = pt.getPanAngle();
 			currTilt = pt.getTiltAngle();
-			if((currPan == -90) && (currTilt == -90)){
+			if((currPan >= -90) && (currTilt >= -90)){
 				return true;
 			}else{
 				return false;
@@ -223,7 +223,7 @@ public:
 			currPan = pt.getPanAngle();
 			tilt = pt.getTiltAngle();
 
-			for(int i=-90; i < 91; i++){
+			for(int i=-35; i < 89; i++){
 				pt.setPanAngle(i);
 				currPan = pt.getPanAngle();
 				currTilt = pt.getTiltAngle();
@@ -255,7 +255,7 @@ public:
 			currTilt = pt.getTiltAngle();
 			pan = pt.getPanAngle();
 
-			for(int i=-90; i < 91; i++){
+			for(int i=-35; i < 89; i++){
 				pt.setTiltAngle(i);
 				currPan = pt.getPanAngle();
 				currTilt = pt.getTiltAngle();
@@ -287,7 +287,7 @@ public:
 			pan = 3;
 			pt.setPanAngle(pan);
 
-			for(int i=-10; i < 10; i++){
+			for(int i=-5; i < 5; i++){
 				pt.changePanAngle(i);
 				currPan = pt.getPanAngle();
 				if(currPan != (pan + i)){
@@ -318,7 +318,7 @@ public:
 			tilt = -3;
 			pt.setTiltAngle(tilt);
 
-			for(int i=-10; i < 10; i++){
+			for(int i=-5; i < 5; i++){
 				pt.changeTiltAngle(i);
 				currTilt = pt.getTiltAngle();
 				if(currTilt != (tilt + i)){

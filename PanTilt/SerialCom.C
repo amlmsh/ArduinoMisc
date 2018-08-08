@@ -34,8 +34,8 @@ using namespace std;
 
 
 SerialCom::SerialCom(){
-	currValueA_ = 0;
-	currValueB_ = 0;
+	currValueA_ = 90;
+	currValueB_ = 90;
 }
 
 void SerialCom::openSerialCom(string dev, const int bps){
@@ -71,7 +71,7 @@ void SerialCom::openSerialCom(string dev, const int bps){
     }
 
 
-    setValueAandB(currValueA_, currValueB_);
+    //setValueAandB(currValueA_, currValueB_);
 }
 void SerialCom::closeSerialCom(){
 	if(fd_ > 0){
@@ -93,7 +93,6 @@ int  SerialCom::getValueB(){
 void SerialCom::setValueA(int value){
 	try{
 		this->setValueAandB(value, currValueB_);
-		currValueA_ = value;
 	}catch(string msg){
 		throw msg;
 	}catch(...){
@@ -104,7 +103,6 @@ void SerialCom::setValueA(int value){
 void SerialCom::setValueB(int value){
 	try{
 		this->setValueAandB(currValueA_, value);
-		currValueB_ = value;
 	}catch(string msg){
 		throw msg;
 	}catch(...){
@@ -114,10 +112,19 @@ void SerialCom::setValueB(int value){
 
 void SerialCom::sendIntStr(int fileDescrp, const char stopChar, int value){
 	string sendStr;
+	const char *data;
 
 	sendStr = std::to_string(value) + stopChar;
-	write(fileDescrp, sendStr.c_str(), sizeof(char)*sendStr.size() );
+	data = sendStr.c_str();
 
+	int i=0;
+	while(i < sendStr.size()){
+		write(fileDescrp, &data[i], sizeof(char));
+		if(data[i] == stopChar){
+			break;
+		}
+		i++;
+	}
 
 	return;
 }
@@ -138,7 +145,7 @@ int  SerialCom::receiveIntStr(int fileDescrp, const char stopChar){
     		buf[idx + 1] = '\0';
     		idx++;
     	}else{
-    		//cout << "\n\n" << "buffer read:" << buf << "\n\n";
+    		//cout << " buffer read:" << buf << "\n";
     		resValue = atoi(buf);
     	    return resValue;
     	}

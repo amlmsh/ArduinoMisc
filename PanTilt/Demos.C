@@ -40,55 +40,16 @@ void demoPanTilt(){
 
 	PanTiltDegree leftCam;
 
-	leftCam.openSerialCom("/dev/ttyACM1");
-
-	leftCam.closeSerialCom();
-
-	leftCam.openSerialCom("/dev/ttyACM1");
+	leftCam.openSerialCom("/dev/ttyUSB0");
 
 	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
 
-	leftCam.setPanAngle(0);
-	leftCam.setTiltAngle(0);
+	leftCam.setPanAngle(-30);
+	leftCam.setTiltAngle(-30);
 	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
 
-	leftCam.setPanAngle(180);
-	leftCam.setTiltAngle(180);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-
-	leftCam.setPanAngle(-180);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-
-	leftCam.setTiltAngle(-180);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-
-	for(int i=0; i < 200; i++){
-		leftCam.changePanAngle(1);
-		leftCam.changeTiltAngle(1);
-		cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-	}
-
-	for(int i=0; i < 200; i++){
-		leftCam.changePanAngle(-1);
-		leftCam.changeTiltAngle(-1);
-		cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-	}
 
 
-
-	leftCam.setPanAngle(0);
-	leftCam.setTiltAngle(0);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-
-	leftCam.changePanAngle(200);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-	leftCam.changePanAngle(-200);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-
-	leftCam.changeTiltAngle(200);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
-	leftCam.changeTiltAngle(-200);
-	cout << "[" << leftCam.getPanAngle()  << "; " << leftCam.getTiltAngle() << "]\n";
 
 	leftCam.closeSerialCom();
 }
@@ -98,11 +59,11 @@ void demoSerialCom(){
 	SerialCom sc;
 
 	try {
-		sc.openSerialCom(string("/dev/ttyACM1"), 9600);
+		sc.openSerialCom(string("/dev/ttyUSB0"), 9600);
 
-		int i = 0;
+		int i = 50;
 
-		while (i < 101) {
+		while (i < 100) {
 			sc.setValueA(i);
 			sc.setValueB(i+1);
 
@@ -121,7 +82,7 @@ void demoSerialCom(){
 
 
 void demo(){
-    int fileDescriptor = open("/dev/ttyACM0", O_RDWR | O_NOCTTY);
+    int fileDescriptor = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
 
     struct termios newtio;
     bzero(&newtio, sizeof(newtio));
@@ -151,14 +112,14 @@ void demo(){
         throw string("could not set the serial settings!");
     }
 
-    int i = -999;
+    int i = 60;
     char buf[64];
     long received;
     long wrote;
     char c[1];
     int idx = 0;
 
-    while(i < 999) {
+    while(i < 120) {
 
         string res = std::to_string(i++) + "X";
         wrote = write(fileDescriptor, res.c_str(), sizeof(char)*res.size() );
